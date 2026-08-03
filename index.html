@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs · Tracker (concept) | AI Resume Parser & Job Matcher</title>
+  <meta name="description" content="AI Job Matcher & Application Tracker. Upload or paste a resume to automatically extract skills, experience, and match top jobs.">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Global Header Navbar (in logo removed) -->
+    <header class="ln-nav">
+      <div class="ln-nav-container">
+        <!-- Brand & Concept Badge -->
+        <div class="ln-nav-left">
+          <span class="ln-concept-badge">Jobs · Tracker (concept)</span>
+
+          <!-- Global Search -->
+          <div class="ln-search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="search-input" placeholder="Search jobs, skills, companies...">
+          </div>
+        </div>
+
+        <!-- View Switcher & Action Controls -->
+        <div class="ln-nav-right-actions">
+          <div class="view-mode-toggle">
+            <button class="view-btn active" id="view-discover-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Discover (AI matched)
+            </button>
+            <button class="view-btn" id="view-tracker-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              Applications
+            </button>
+            <button class="view-btn" id="view-board-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18"></rect><rect x="14" y="3" width="7" height="11"></rect></svg>
+              Board
+            </button>
+            <button class="view-btn" id="view-compare-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="8 21 3 21 3 16"></polyline></svg>
+              Compare
+            </button>
+          </div>
+
+          <button id="top-add-job-btn" class="ln-btn-primary nav-add-btn">+ Add job</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- VIEW 1: DISCOVER FEED (AI MATCHED 3-COLUMN LAYOUT) -->
+    <main id="section-discover" class="ln-container view-section">
+      <!-- LEFT COLUMN: Candidate Profile & Resume Auto-Parser -->
+      <aside class="ln-col-left">
+
+        <!-- AI Resume Auto-Extractor / Upload Card -->
+        <div class="ln-card resume-upload-card">
+          <div class="card-title-row">
+            <h3>📄 AI Resume Auto-Parser</h3>
+            <span class="resume-badge-sparkle">✨ Instant Match</span>
+          </div>
+          <p class="resume-hint">Upload or paste your resume. Our AI automatically extracts skills, experience, and projects to match jobs instantly.</p>
+
+          <!-- Dropzone -->
+          <div class="dropzone" id="resume-dropzone">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>Drop Resume (.txt, .pdf) or click to browse</span>
+            <input type="file" id="resume-file-input" accept=".txt,.pdf,.doc,.docx">
+          </div>
+
+          <!-- Paste Raw Text Drawer Toggle -->
+          <div class="resume-actions-row">
+            <button id="toggle-paste-btn" class="ln-btn-sm" style="width: 100%;">📋 Paste Raw Resume Text</button>
+          </div>
+
+          <div id="paste-resume-box" class="paste-box hidden mt-2">
+            <textarea id="raw-resume-text" class="ln-input textarea" rows="4" placeholder="Paste full resume text here (e.g. Senior PM with 5 years experience in SQL, Product Strategy, A/B Testing)..."></textarea>
+            <button id="parse-text-btn" class="ln-btn-primary mt-2" style="width: 100%;">Auto-Extract Profile & Match</button>
+          </div>
+
+          <!-- Quick Test Sample Resumes -->
+          <div class="quick-sample-resumes">
+            <span class="sample-label">Try Demo Resume:</span>
+            <div class="sample-btns">
+              <button class="btn-sample-resume" data-sample="pm">Growth PM (3 Yrs)</button>
+              <button class="btn-sample-resume" data-sample="lead">Senior Tech Lead (6 Yrs)</button>
+              <button class="btn-sample-resume" data-sample="apm">APM Candidate (1 Yr)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Candidate Profile Card -->
+        <div class="ln-card profile-card">
+          <div class="profile-banner"></div>
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-lg">AP</div>
+          </div>
+          <div class="profile-body">
+            <h2 id="profile-name-display">Candidate Name</h2>
+            <p class="profile-headline" id="profile-headline-display">Associate Product Manager Candidate | Product Strategy & Analytics</p>
+            <p class="profile-location">San Francisco Bay Area · Contact info</p>
+
+            <div class="preset-selector-box">
+              <label for="preset-select">Switch Candidate Persona:</label>
+              <select id="preset-select" class="ln-select">
+                <option value="default">Standard PM (3 Yrs Exp)</option>
+                <option value="senior">Senior Product Lead (6 Yrs Exp)</option>
+                <option value="junior">Junior APM Candidate (1 Yr Exp)</option>
+                <option value="technical">Technical PM (4 Yrs Exp)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="profile-stats">
+            <div class="stat-row">
+              <span class="stat-title">Profile views</span>
+              <span class="stat-count">1,420</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-title">Post impressions</span>
+              <span class="stat-count">8,930</span>
+            </div>
+            <div class="stat-row highlight-stat">
+              <span class="stat-title">InFit AI Matched Roles</span>
+              <span class="stat-count" id="stat-matched-count">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume & Extracted Skills Drawer Card -->
+        <div class="ln-card">
+          <div class="card-title-row">
+            <h3>Extracted Skills & Experience</h3>
+            <span class="edit-icon" id="toggle-skills-edit" title="Edit Profile">✏️</span>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label>Years of Experience</label>
+              <span class="exp-badge" id="exp-val-display">3.0 Yrs</span>
+            </div>
+            <input type="range" id="candidate-experience" class="ln-slider" min="0" max="12" step="0.5" value="3">
+          </div>
+
+          <div class="form-group">
+            <label>Skills Profile</label>
+            <div id="skills-container" class="skills-tags-wrap">
+              <!-- Dynamically populated skill tags -->
+            </div>
+            <div class="input-inline">
+              <input type="text" id="new-skill-input" class="ln-input" placeholder="Add skill (e.g. SQL, APIs)...">
+              <button id="add-skill-btn" class="ln-btn-sm">+ Add</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Key Projects & Achievements</label>
+            <div id="projects-container" class="projects-list">
+              <!-- Dynamically populated project items -->
+            </div>
+            <div class="input-inline mt-2">
+              <input type="text" id="new-project-input" class="ln-input" placeholder="Describe key project outcome...">
+              <button id="add-project-btn" class="ln-btn-sm">+ Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- APM Portfolio Case Study Note -->
+        <div class="ln-card apm-note-card">
+          <div class="apm-note-header">
+            <span class="apm-badge">APM Case Study</span>
+            <h4>Why Resume Auto-Parsing?</h4>
+          </div>
+          <p class="apm-note-text">
+            <strong>Problem:</strong> Job seekers waste 15+ minutes filling out manual profile forms.<br>
+            <strong>Solution:</strong> 1-click AI resume extraction automatically populates skills & experience, instantly highlighting roles above fit threshold.
+          </p>
+        </div>
+      </aside>
+
+      <!-- CENTER MAIN COLUMN: InFit Feature Banner & Job Feed -->
+      <section class="ln-col-main">
+        <!-- InFit AI Header Feature Banner -->
+        <div class="infit-feature-banner">
+          <div class="banner-content">
+            <div class="banner-badge">
+              <span class="sparkle">✨</span> AI Resume Matcher Feature
+            </div>
+            <h2>Find roles matching your extracted resume</h2>
+            <p>Our transparent matching algorithm automatically reads your resume skills, experience depth, and project highlights to calculate real-time job fit scores.</p>
+          </div>
+        </div>
+
+        <!-- Controls & Filter Bar -->
+        <div class="ln-card filter-card">
+          <div class="filter-row-top">
+            <div class="threshold-control">
+              <div class="threshold-header">
+                <span class="threshold-label">Match Threshold Cutoff</span>
+                <span class="threshold-val-badge" id="threshold-val">65% Fit</span>
+              </div>
+              <input type="range" id="threshold-slider" class="ln-slider slider-primary" min="0" max="100" value="65">
+              <div class="slider-labels">
+                <span>0% (All Jobs)</span>
+                <span>65% (Recommended)</span>
+                <span>85% (Strict Fit)</span>
+              </div>
+            </div>
+
+            <button id="add-job-modal-btn" class="ln-btn-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Post Job Opportunity
+            </button>
+          </div>
+
+          <!-- Quick Pill Filters -->
+          <div class="filter-pills-row">
+            <button class="filter-pill active" id="filter-all">All Roles</button>
+            <button class="filter-pill" id="filter-high">≥ 85% High Fit</button>
+            <button class="filter-pill" id="filter-easy">Easy Apply</button>
+            <button class="filter-pill" id="filter-remote">Remote / Hybrid</button>
+          </div>
+        </div>
+
+        <!-- Job Feed Header -->
+        <div class="feed-header">
+          <h3>Jobs Recommended for You</h3>
+          <span class="feed-sub" id="feed-count-summary">Showing 8 roles based on your profile & 65% match threshold</span>
+        </div>
+
+        <!-- Jobs List Feed -->
+        <div id="jobs-feed-list" class="jobs-feed-list">
+          <!-- Dynamically generated LinkedIn-style job cards -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="ln-card empty-state-card hidden">
+          <div class="empty-icon">🔎</div>
+          <h3>No open roles meet your fit criteria</h3>
+          <p>Try adjusting your threshold slider or adding complementary skills to your candidate profile.</p>
+          <button id="reset-threshold-btn" class="ln-btn-primary mt-3">Reset Threshold to 50%</button>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Fit Engine Specs & Insights Widget -->
+      <aside class="ln-col-right">
+        <!-- InFit AI Scoring Transparency Card -->
+        <div class="ln-card algorithm-spec-card">
+          <div class="card-title-row">
+            <h3>InFit™ Scoring Transparency</h3>
+            <span class="info-tag">Inspectable AI</span>
+          </div>
+          <p class="spec-intro">Unlike black-box ATS screeners, candidates see exactly how scores are calculated:</p>
+
+          <div class="spec-breakdown">
+            <div class="spec-item">
+              <div class="spec-header">
+                <span>Skill Requirements Overlap</span>
+                <span class="weight-tag" id="weight-skill-val">75%</span>
+              </div>
+              <input type="range" id="weight-skill" class="ln-slider-sm" min="10" max="90" value="75">
+            </div>
+
+            <div class="spec-item">
+              <div class="spec-header">
+                <span>Experience Level Fit</span>
+                <span class="weight-tag" id="weight-exp-val">25%</span>
+              </div>
+              <input type="range" id="weight-exp" class="ln-slider-sm" min="10" max="90" value="25">
+            </div>
+
+            <div class="spec-item">
+              <div class="spec-header">
+                <span>Project Skill Mention Bonus</span>
+                <span class="weight-tag" id="weight-bonus-val">+5%</span>
+              </div>
+              <input type="range" id="weight-bonus" class="ln-slider-sm" min="0" max="20" value="5">
+            </div>
+          </div>
+
+          <div class="formula-box">
+            <code>Fit % = Min(100, (Skill% × 0.75) + (Exp% × 0.25) + ProjectBonus)</code>
+          </div>
+        </div>
+
+        <!-- Application Strategy Tip Card -->
+        <div class="ln-card tip-card">
+          <h4>💡 APM Candidate Tip</h4>
+          <p>Jobs with fit scores <strong>≥ 85%</strong> have a 3.4x higher interview callback rate. Prioritize custom cover notes on high-match roles!</p>
+        </div>
+
+        <!-- Footer Links -->
+        <footer class="ln-footer">
+          <p>InFit™ AI Job Matcher Concept · Designed for APM Candidate Portfolio</p>
+          <p>© 2026 InFit Product Portfolio Demonstration</p>
+        </footer>
+      </aside>
+    </main>
+
+    <!-- VIEW 2: APPLICATION TRACKER TABLE -->
+    <section id="section-tracker" class="ln-container-wide view-section hidden">
+      <div class="tracker-header-box">
+        <div>
+          <h2>Your applications</h2>
+          <p class="tracker-sub">Auto-tracked from Easy Apply. Drag cards or edit table to update status.</p>
+        </div>
+      </div>
+
+      <!-- Application Tracker Table Card -->
+      <div class="tracker-table-card">
+        <table class="tracker-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">JOB</th>
+              <th style="width: 15%;">STATUS</th>
+              <th style="width: 15%;">AI FIT SCORE</th>
+              <th style="width: 15%;">PRIORITY</th>
+              <th style="width: 30%;">NOTES</th>
+            </tr>
+          </thead>
+          <tbody id="tracker-table-body">
+            <!-- Dynamically populated tracked application rows -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 3: KANBAN BOARD VIEW -->
+    <section id="section-board" class="ln-container-wide view-section hidden">
+      <div class="tracker-header-box">
+        <div>
+          <h2>Application Pipeline Board</h2>
+          <p class="tracker-sub">Visual pipeline stage view of tracked job opportunities</p>
+        </div>
+      </div>
+
+      <div class="kanban-board-grid">
+        <div class="kanban-col" data-status="Saved">
+          <div class="kanban-col-header">
+            <span>📌 Saved (<span class="col-count" id="count-saved">0</span>)</span>
+          </div>
+          <div class="kanban-cards-container" id="kanban-saved"></div>
+        </div>
+
+        <div class="kanban-col" data-status="Applied">
+          <div class="kanban-col-header">
+            <span>📝 Applied (<span class="col-count" id="count-applied">0</span>)</span>
+          </div>
+          <div class="kanban-cards-container" id="kanban-applied"></div>
+        </div>
+
+        <div class="kanban-col" data-status="Interview">
+          <div class="kanban-col-header">
+            <span>🎯 Interview (<span class="col-count" id="count-interview">0</span>)</span>
+          </div>
+          <div class="kanban-cards-container" id="kanban-interview"></div>
+        </div>
+
+        <div class="kanban-col" data-status="Offer">
+          <div class="kanban-col-header">
+            <span>🎉 Offer (<span class="col-count" id="count-offer">0</span>)</span>
+          </div>
+          <div class="kanban-cards-container" id="kanban-offer"></div>
+        </div>
+
+        <div class="kanban-col" data-status="Rejected">
+          <div class="kanban-col-header">
+            <span>❌ Archive / Ended (<span class="col-count" id="count-rejected">0</span>)</span>
+          </div>
+          <div class="kanban-cards-container" id="kanban-rejected"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: SIDE-BY-SIDE COMPARE MATRIX -->
+    <section id="section-compare" class="ln-container-wide view-section hidden">
+      <div class="tracker-header-box">
+        <div>
+          <h2>Side-by-Side Job Comparison</h2>
+          <p class="tracker-sub">Compare job requirements, fit scores, and missing skills to prioritize your applications</p>
+        </div>
+      </div>
+
+      <div class="compare-matrix-card">
+        <div id="compare-table-wrapper" class="compare-table-wrapper">
+          <!-- Dynamically generated comparison table -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Job Detail Side Drawer / Modal -->
+    <div id="detail-modal" class="modal-overlay hidden">
+      <div class="modal-card ln-modal-card">
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+        <div id="modal-content">
+          <!-- Dynamically populated job breakdown -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Add New Job Modal -->
+    <div id="add-job-modal" class="modal-overlay hidden">
+      <div class="modal-card ln-modal-card">
+        <button class="modal-close" id="add-job-close-btn">&times;</button>
+        <div class="modal-header">
+          <h2>Post New Job Opportunity</h2>
+          <p>Add a role to test InFit AI matching evaluation</p>
+        </div>
+        <form id="new-job-form">
+          <div class="form-group">
+            <label for="job-title">Job Title</label>
+            <input type="text" id="job-title" class="ln-input" required placeholder="e.g. Associate Product Manager">
+          </div>
+          <div class="form-group">
+            <label for="job-company">Company Name</label>
+            <input type="text" id="job-company" class="ln-input" required placeholder="e.g. TechCorp">
+          </div>
+          <div class="form-group">
+            <label for="job-min-exp">Minimum Required Experience (Years)</label>
+            <input type="number" id="job-min-exp" class="ln-input" min="0" max="15" step="1" value="2" required>
+          </div>
+          <div class="form-group">
+            <label for="job-skills">Required Skills (comma separated)</label>
+            <input type="text" id="job-skills" class="ln-input" placeholder="e.g. Product Strategy, SQL, A/B Testing" required>
+          </div>
+          <div class="form-group">
+            <label for="job-desc">Job Description</label>
+            <textarea id="job-desc" class="ln-input textarea" rows="3" placeholder="Brief job scope and team responsibilities..."></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancel-job-btn" class="ln-btn-secondary">Cancel</button>
+            <button type="submit" class="ln-btn-primary">Post Job Role</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="ln-toast hidden">
+      <div class="toast-icon">✓</div>
+      <span id="toast-message">Application submitted!</span>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
